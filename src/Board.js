@@ -187,7 +187,7 @@
       var startCol= minorDiagonalColumnIndexAtFirstRow
 
       
-      for (;startRow<size && startCol>0; startRow++,startCol--){
+      for (;startRow<size && startCol>=0; startRow++,startCol--){
         if (startCol<size){
           var row=this.get(startRow)
             count+=row[startCol]
@@ -199,8 +199,9 @@
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
       var n = this.get('n');
-      for ( var i = (n-1)*2; i >=0; i-- ) {
-        if (this.hasMajorDiagonalConflictAt(i)) {
+      var diagonals = 2*(n-1);
+      for ( var i = diagonals; i >=0; i-- ) {
+        if (this.hasMinorDiagonalConflictAt(i)) {
           return true;
         }
       }
