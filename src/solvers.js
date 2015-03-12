@@ -14,9 +14,35 @@
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n rooks placed such that none of them can attack each other
 
 window.findNRooksSolution = function(n) {
-  var solution = undefined; //fixme
+  var solution;
+  var board = new Board({n: n});
+  var rookCount = 0;
+  var row = 0;
+  var col = 0;
 
-  console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
+    var boardExplorer = function(){
+
+      board.togglePiece(row, col);
+      rookCount++;
+
+      if ( board.hasColConflictAt(col) ) {
+        board.togglePiece(row, col);
+        rookCount--;
+        col++;
+        boardExplorer();
+      }
+      else {
+        row++;
+        if (rookCount === n) {
+          solution = board.rows();
+          return;
+        }
+        boardExplorer();
+      }
+    };
+
+  boardExplorer();
+
   return solution;
 };
 
@@ -24,10 +50,45 @@ window.findNRooksSolution = function(n) {
 
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n) {
-  var solutionCount = undefined; //fixme
+  // var board = new Board({n: n});
+  // var boardArray = board.rows();
+  // var solutionCount = 0;
+  // var rookCount = 0;
+  // var row = 0;
+  // var col = 0;
 
-  console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
-  return solutionCount;
+  //   var boardExplorer = function(){
+
+  //     boardArray.togglePiece(row, col);
+  //     rookCount++;
+
+  //     if ( boardArray.hasColConflictAt(col) ) {
+  //       boardArray.togglePiece(row, col);
+  //       rookCount--;
+  //       col++;
+  //       boardExplorer();
+  //     }
+  //     else {
+  //       row++;
+  //       if (rookCount === n) {
+  //         solutionCount++;
+  //       }
+  //       boardExplorer();
+  //     }
+  //   };
+
+  //   boardExplorer();
+  // };
+  // iterate over board row 0 (0-n)
+    // toggle piece
+    // test for conflict
+    // if conflict, then toggle off and continue
+    // else, test for solution
+      // if solution, increment count
+      // if no solution, skip to the next row and recurse
+
+  // console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
+  // return solutionCount;
 };
 
 
