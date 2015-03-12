@@ -51,34 +51,32 @@ window.findNRooksSolution = function(n) {
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n) {
   var solutionCount = 0;
-  var rookCount = 0;
   var board = new Board({n: n});
+  var row = 0;
 
-  var boardExplorer = function(){
-
-    for ( var i = 0; i < n; i++) {
-      board.togglePiece(row, col);
-      rookCount++;
-
-      if ( board.hasColConflictAt(col) ) {
-        board.togglePiece(row, col);
-        rookCount--;
-        boardExplorer();
-      }
-      else {
-        row++;
-        if (rookCount === n) {
-          solutionCount++;
-        }
-        
-        boardExplorer();
-      }
+  var boardExplorer = function(row){
+    // if we're on row 4, we have a soln
+    if ( row === n ) {
+      solutionCount++;
+      return;
     }
+    for ( var col = 0; col < n; col++ ) {
+      // place a piece, toggle it
+      board.togglePiece(row, col);
+      // if there's no conflict
+      if ( !board.hasAnyRooksConflicts() ) {
+        // recurse on row+1 so that rows will increment
+        boardExplorer(row + 1);
+      }
+      // remove piece once we're ready to move on to the next decision
+      board.togglePiece(row, col);
+    }
+
   };
 
-  boardExplorer();
+  boardExplorer(row);
 
-  return solutionCount
+  return solutionCount;
 };
 
 
