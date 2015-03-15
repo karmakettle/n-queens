@@ -83,15 +83,14 @@ window.countNRooksSolutions = function(n) {
 
 // return a matrix (an array of arrays) representing a single nxn chessboard, with n queens placed such that none of them can attack each other
 window.findNQueensSolution = function(n) {
-  var solution = [[]];
-  var 
   var board = new Board({n: n});
   var row = 0;
+  var solnFlag = false;
 
   var boardExplorer = function(row){
     // if we're on row 4, we have a soln
     if ( row === n ) {
-      solution = board.rows();
+      solnFlag = true;
       return;
     }
 
@@ -102,9 +101,12 @@ window.findNQueensSolution = function(n) {
       if ( !board.hasAnyQueensConflicts() ) {
         // recurse on row+1 so that rows will increment
         boardExplorer(row + 1);
+        if ( solnFlag ) {
+          return;
+        }
       }
 
-      // remove piece once we're ready to move on to the next decision      
+      // remove piece once we're ready to move on to the next decision
       board.togglePiece(row, col);
     }
 
@@ -112,8 +114,8 @@ window.findNQueensSolution = function(n) {
 
   boardExplorer(row);
 
-  console.log('Single solution for ' + n + ' queens:', JSON.stringify(solution));
-  return solution;
+  console.log('Single solution for ' + n + ' queens:', JSON.stringify(board.rows()));
+  return board.rows();
 };
 
 
